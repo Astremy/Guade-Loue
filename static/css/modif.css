@@ -1,0 +1,30 @@
+body {
+	background-color: darkgray;
+	margin:0px;
+	text-align: center;
+}
+
+.contenu {
+	position: absolute;
+	top:60px;
+	height: 1000px;
+	width: 80%;
+	margin-left: 10%;
+	background-color:lightgray;
+	margin-bottom: 30px;
+}
+
+textarea {
+	text-align: center;
+	resize:none;
+	height: 300px;
+	width: 60%;
+}
+
+p {
+	margin:7px;
+}
+
+h2 {
+	color:red;
+}

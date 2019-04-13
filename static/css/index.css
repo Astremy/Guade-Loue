@@ -1,0 +1,62 @@
+body {
+	background-color: darkgray;
+	margin:0px;
+	text-align: center;
+}
+
+p {
+	margin:8px;
+}
+
+.contenu h2 {
+	font-size: 35px;
+	margin-top: 50px;
+	color:#CD0C0C;
+}
+
+.menu a {
+	color:blue;
+	font-size: 30px;
+	text-decoration: none;
+	margin:4%;
+	border:2px solid gray;
+	border-radius:5px;
+	padding:3px;
+	cursor: pointer;
+}
+
+.contenu,.menu {
+	margin-top: 10px;
+}
+
+.contenu {
+	position: absolute;
+	top:50px;
+	height: 1000px;
+	width: 80%;
+	margin-left: 10%;
+	background-color:lightgray;
+	margin-bottom: 30px;
+}
+
+.presentationdroite {
+	position: absolute;
+	top:150px;
+	height: 300px;
+	width: 20%;
+	margin-left: 60%;
+	background-color:lightgray;
+}
+
+.presentationgauche {
+	position: absolute;
+	top:150px;
+	height: 300px;
+	width: 30%;
+	margin-left: 25%;
+	background-color:lightgray;
+}
+
+a {
+	color:red;
+}

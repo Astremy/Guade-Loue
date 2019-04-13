@@ -1,0 +1,56 @@
+p {
+	margin:8px;
+}
+
+body {
+	background-color: darkgray;
+	margin:0px;
+	text-align: center;
+}
+
+h2 {
+	font-size: 35px;
+	margin-top: 20px;
+	color:#CD0C0C;
+}
+
+a {
+	text-decoration: none;
+	color:blue;
+}
+
+.profil {
+	position:absolute;
+	text-align: center;
+	width: 100%;
+}
+
+.contenu {
+	position: absolute;
+	top:60px;
+	height: 1000px;
+	width: 80%;
+	margin-left: 10%;
+	background-color:lightgray;
+	margin-bottom: 30px;
+}
+
+.modif {
+	color:red;
+}
+
+.contenudroite {
+	position:relative;
+	float:right;
+	margin-right: 10%;
+	width: 40%;
+	height: 200px;
+}
+
+.contenugauche {
+	position:relative;
+	float:left;
+	margin-left:10%;
+	width: 40%;
+	height: 200px;
+}

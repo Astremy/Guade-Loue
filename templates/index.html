@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Guade-Loue</title>
+		<link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="contenu">
+			<div class="menu">
+				<a href="/locations">Réservation</a>
+				{% if co %}
+				<a href="/profile">Mon compte</a>
+				<a href="/deco">Se déconnecter</a>
+				{% else %}
+				<a onclick="login();">Connexion</a>
+				<a href="/inscription">Inscription</a>
+				{% endif %}
+			</div>
+			<h2>Guade-Loue</h1>
+			<div class="presentationdroite">
+				<img src="{{ url_for('static', filename='images/image.jpg') }}" alt="nya" style="width:100px;height:100px;margin-top:10px;">
+			</div>
+			<div class="presentationgauche">
+				<p>Guade-Loue est une entreprise spécialisé dans la location de maison entre les habitants guadeloupéens.</p>
+				<p>Sur le marché depuis 2017, elle permet uns échange entre propriétaire et locataire</p>
+				<a href="/locations">Cliquez pour voir nos offres !</a>
+				<p>La part que nous prenons, ce qui permet d'avoir un maximum de proximité entre les personnes !</p>
+			</div>
+		</div>
+		{% if not co %}
+		<div>
+			<link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet" type="text/css" />
+			{% include 'login.html' %}
+		</div>
+		{% endif %}
+	</body>
+</html>

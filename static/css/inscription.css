@@ -1,0 +1,20 @@
+p {
+	margin:8px;
+}
+
+h2 {
+	font-size: 35px;
+	margin-top: 20px;
+	color:#CD0C0C;
+}
+
+a {
+	text-decoration: none;
+	color:blue;
+}
+
+.inscrire {
+	position:absolute;
+	text-align: center;
+	width: 100%;
+}

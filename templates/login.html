@@ -1,0 +1,28 @@
+<div class="login_module" style="display:none;">
+    <h2>Connexion :</h2>
+    <form action='/login' method='post'>
+        <p>Pseudo <input size="10" name='pseudo'/></p>
+        <p>Mot de passe <input type='password' size="10" name='mdp'/></p>
+        <button>Se connecter</button>
+    </form>
+    <nya onclick="login();">Fermer</nya>
+    <script type="text/javascript">
+    var active = false;
+    function login(){
+        if (active==true) {
+            var liste = document.getElementsByTagName("a");
+            for (var i=0; i<liste.length; i++)
+                liste[i].style.visibility = "";
+            active = false;
+            document.getElementsByClassName("login_module")[0].style.display = "none";
+        }
+        else {
+            var liste = document.getElementsByTagName("a");
+            for (var i=0; i<liste.length; i++)
+                liste[i].style.visibility = "hidden";
+            active = true;
+            document.getElementsByClassName("login_module")[0].style.display = "";
+        }
+    }
+    </script>
+</div>

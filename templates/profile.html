@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ name }}</title>
+		<link href="{{ url_for('static', filename='css/profile.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="contenu">
+			<div class="profil">
+				<h2>{{name}}</h2>
+				<div class="contenugauche">
+					<h3>Mes Offres</h3>
+					{% if propositions %}
+					{% for i in propositions %}
+					<p><a href="/locations/{{i['nb']}}">{{i["title"]}}</a> <a href="/modif/{{i['nb']}}" class=modif>[Modifier l'offre]</a></p>
+					{% endfor %}
+					<a href="/create">Creer une nouvelle Offre</a>
+					{% else %}
+					<p>Vous n'avez aucune offre</p>
+					<a href="/create">Louez votre maison !</a>
+					{% endif %}
+				</div>
+				<div class="contenudroite">
+					<p>Contenu</p>
+				</div>
+				<p><a href="/">Menu</a></p>
+			</div>
+		</div>
+	</body>
+</html>

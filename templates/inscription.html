@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>S'inscrire</title>
+		<link href="{{ url_for('static', filename='css/inscription.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="inscrire">
+		<form id="compte" action="/inscription" method="post">
+        	<p><label>Pseudo</label> : <input type="text" name="pseudo" size="10" maxlength="50" id="pseudonyme" oninput="verifpseudo();" /></p><label id="ps"></label>
+            <p><label>Mot De Passe</label> : <input type="password" name="mot_de_passe" size="10" maxlength="50" id="protec" oninput="protection()" /> <b><label id="mdp"></label></b></p>
+            <p id="protec2"><label>Répétez Le Mot De Passe</label> : <input type="password" id="protecmot" size="10" maxlength="50" oninput="verifMdp()" /></p>
+            <p><b><label id="pareil"></label></b></p>
+            <p><label>Adresse Mail</label> : <input id="email" oninput="verifmail();" type="text" name="mail" size="10" maxlength="50" /> <b><label id="cochemail"></label></b></p>
+            <p><button onclick="test(); return false;">Valider</button></p>
+            </form>
+            <script language="Javascript">
+                var protecmdp = document.getElementById("protec2");
+                protecmdp.style.display = "none";
+                var compte = document.getElementById("compte");
+                var mdp = document.getElementById("mdp");
+                var pareil = document.getElementById("pareil");
+                var cochemail = document.getElementById("cochemail");
+                var ps = document.getElementById("ps");
+                var testmail = 0;
+                var testpareil = 0;
+                {% if notif %}
+                alert("Le pseudo est déjà pris !");
+                {% endif %}
+                function verifmail()
+                {
+                    var email = document.getElementById("email").value;
+                    if (email.indexOf("@") >= 0 && email.indexOf(".") >= 0 && email.length > 6)
+                    {
+                        cochemail.textContent = "✓";
+                        cochemail.style.color = "green";
+                        testmail = 1;
+                    }
+                    else if (email == "")
+                    {
+                        cochemail.textContent = "";
+                        testmail = 0;
+                    }
+                    else
+                    {
+                        cochemail.textContent = "✗";
+                        cochemail.style.color = "red";
+                        testmail = 0;
+                    }
+                }
+                function test()
+                {
+                    if (testpareil == 0) alert("Les mots de passe ne sont pas identiques !");
+                    else if (testmail == 0) alert("L'adresse mail est incorrecte !");
+                    else compte.submit();
+                }
+                function verifMdp()
+                {
+                    var protec = document.getElementById("protec").value;
+                    var protecmot = document.getElementById("protecmot").value;
+                    if (protec == protecmot)
+                    {
+                        pareil.textContent = "Mots de passe identiques";
+                        pareil.style.color = "green";
+                        testpareil = 1;
+                    }
+                    else 
+                    {
+                        pareil.textContent = "Mots de passe différents";
+                        pareil.style.color = "red";
+                        testpareil = 0;
+                    }
+                }
+                function protection()
+                {
+                    var protec = document.getElementById("protec").value;
+                    var protec2 = document.getElementById("protec2");
+                    var protecmot = document.getElementById("protecmot");
+                    protec2.style.display = "initial";
+                    if (protec.length == 0)
+                    {
+                        mdp.textContent = "";
+                        protec2.style.display = "none";
+                        protecmot.value = "";
+                        pareil.textContent = "";
+                        testpareil = 0;
+                    }
+                    else if (protec.length < 6)
+                    {
+                        mdp.textContent = "Faible";
+                        mdp.style.color = "red";
+                    }
+                    else if (protec.length < 10)
+                    {
+                        mdp.textContent = "Moyen";
+                        mdp.style.color = "yellow";
+                    }
+                    else
+                    {
+                        mdp.textContent = "Fort";
+                        mdp.style.color = "green";
+                    }
+                    if (!protec.length == 0) verifMdp();
+                }
+            </script>
+        </div>
+	</body>
+</html>

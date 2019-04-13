@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Locations</title>
+		<link href="{{ url_for('static', filename='css/locations.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="contenu">
+			<h2>Location</h2>
+			<div class="offres">
+				{% for i in bdd %}
+				<div class="loc" onclick="window.location = '/locations/{{i["nb"]}}';">
+					<h3>{{i["title"]}}</h3>
+					<p class="droite"><a href="/profile/{{i['owner']}}">{{i["owner"]}}</a></p>
+				</div>
+				{% endfor %}
+				<a href="/">Retour</a>
+			</div>
+		</div>
+	</body>
+</html>

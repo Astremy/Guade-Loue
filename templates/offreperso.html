@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Locations</title>
+		<link href="{{ url_for('static', filename='css/locations.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="contenu">
+			<h2>{{name}}</h2>
+			{% for i in range(taille) %}
+			<a href="/locations/{{name}}/{{i}}">{{perso[i]["title"]}}</p>
+			{% endfor %}
+		</div>
+	</body>
+</html>

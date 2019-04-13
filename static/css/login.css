@@ -1,0 +1,37 @@
+.login_module
+{
+	text-align: center;
+	z-index:1;
+	position:absolute;
+	left:40%;
+	background: white;
+	border: 1px solid black;
+	width: 20%;
+	top:130px;
+	display: inline-block;
+}
+
+.login_module h2
+{
+	font-size: 25px;
+	color:#CD0C0C;
+	margin:20px;
+}
+
+.login_module nya
+{
+	font-size: 15px;
+	color:blue;
+	cursor: pointer;
+}
+
+.login_module input
+{
+	font-size: 15px;
+}
+
+.login_module button
+{
+	font-size:12px;
+	margin:5px;
+}

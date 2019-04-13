@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Locations</title>
+		<link href="{{ url_for('static', filename='css/locations.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="contenu">
+			<h2>{{offre["title"]}}</h2>
+			<p>{{offre["text"]}}</p>
+			<p>
+			{% for i in images %}
+			<img src={{i}} alt='image' />
+			{% endfor %}
+			</p>
+			<a href="/locations">Retour</a>
+		</div>
+	</body>
+</html>
