@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from time import sleep
 
 app = Flask(__name__)
-app.secret_key= "857d5f34ad12c38196cda8a8925c67627ade79d536947de58ef8457c610f28cb"
+app.secret_key= "Key"
 
 app.config['UPLOAD_FOLDER'] = "C:/Users/Astremy/Desktop/Projet/images"
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
