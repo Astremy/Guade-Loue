@@ -10,7 +10,7 @@ from time import sleep
 app = Flask(__name__)
 app.secret_key= "Key"
 
-app.config['UPLOAD_FOLDER'] = "C:/Users/Astremy/Desktop/Projet/images"
+app.config['UPLOAD_FOLDER'] = '''Dossier du projet''' + "/images"
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg'])
 
