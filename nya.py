@@ -16,7 +16,7 @@ class MyClient(discord.Client):
 
 	async def my_background_task(self):
 		await self.wait_until_ready()
-		chann = self.get_channel(565837453231915008)
+		chann = self.get_channel("ID")
 		while not self.is_closed():
 			load = open("images/images.json","r")
 			envoyer = json.loads(load.read())
@@ -47,4 +47,4 @@ class MyClient(discord.Client):
 				load.close()
 
 client = MyClient()
-client.run('NTY1Njk1OTM4MTE5ODYwMjcw.XK6LfA.dfjtmZPH1Dx1zVgab48wQBd1Crk')
+client.run('Token')
