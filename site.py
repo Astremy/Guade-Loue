@@ -1,192 +1,142 @@
-from flask import Flask,url_for,request,redirect,render_template,flash,session
-import matplotlib.pyplot as plt
+from datetime import datetime
+from flask import Flask,url_for,request,redirect,render_template,session
 import json
 import os
 from hashlib import sha1
 import crypt
 from werkzeug.utils import secure_filename
 from time import sleep
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key= "Key"
-
-app.config['UPLOAD_FOLDER'] = '''Dossier du projet''' + "/images"
+app.secret_key= "857d5f34ad12c38196cda8a8925c67627ade79d536947de58ef8457c610f28cb"
+app.config['UPLOAD_FOLDER'] = "C:/Users/Astremy/Desktop/Projet/images"
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['png', 'jpg'])
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bdd.db'
+db = SQLAlchemy(app)
 
-def donnees(recherche,recherche2="",recherche3=""):
-	crypt.crypter("bdd.json", sha1(app.secret_key.encode()).hexdigest(), False)
-	try:
-		load = open("bdd.json","r")
-		bdd = json.loads(load.read())
-		load.close()
-	except:
-		return False
-	crypt.crypter("bdd.json", sha1(app.secret_key.encode()).hexdigest(), True)
-	if recherche2 == "": result = bdd[recherche]
-	elif recherche3 == "": result = bdd[recherche][recherche2]
-	else: result = bdd[recherche][recherche2][recherche3]
-	try: result.reverse()
-	except: pass
-	return result
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    password = db.Column(db.String(60), nullable=False)
+    posts = db.relationship('Post', backref='author', lazy=True)
 
-def entree(value,endroit,endroit2="",endroit3=""):
-	crypt.crypter("bdd.json", sha1(app.secret_key.encode()).hexdigest(), False)
-	try:
-		load = open("bdd.json","r")
-		bdd = json.loads(load.read())
-		load.close()
-	except:
-		return False
-	if endroit2 == "": bdd[endroit] = value
-	elif endroit3 == "": bdd[endroit][endroit2] = value
-	else: bdd[endroit][endroit2][endroit3] = value
-	load = open("bdd.json","w")
-	load.write(json.dumps(bdd,indent=4))
-	load.close()
-	crypt.crypter("bdd.json", sha1(app.secret_key.encode()).hexdigest(), True)
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
-def recherche(perso):
-	retour = []
-	for i in donnees("locations"):
-		if i["owner"] == perso: retour.append(i)
-	try: retour.reverse()
-	except: pass
-	return retour
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-def saveimages(file):
-	images = []
-	names = []
-	load = open("images/photos.json","r")
-	donnees = json.loads(load.read())
-	load.close()
-	for i in range(len(file)):
-		if file and allowed_file(file[i].filename):
-			filename = secure_filename(file[i].filename)
-			names.append(filename)
-			file[i].save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-			images.append(len(donnees)+i)
-	print(names)
-	load = open("images/images.json","w")
-	load.write(json.dumps(names,indent=4))
-	load.close()
-	sleep(5)
-	return images
+    def __repr__(self):
+        return f"Post('{self.title}', '{self.date_posted}')"
 
-def allowed_file(filename):
-	return '.' in filename and \
-		filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+def implemente(user):
+    db.session.add(user)
+    db.session.commit()
+	
 @app.route("/create",methods=["POST","GET"])
 def creerpage():
-	if not "pseudo" in session:
-		return redirect(url_for("index"))
-	if request.method == "GET":
-		return render_template("creerpage.html")
-	elif request.method == "POST":
-		nya = donnees("locations")
-		nya.reverse()
-		length = len(nya)
-		valeur = {"title":request.form["titre"],"text":request.form["texte"],"owner":session["pseudo"],"nb":length}
-		if "file" in request.files:
-			valeur["images"] = saveimages(request.files.getlist("file"))
-		nya.append(valeur)
-		entree(nya,"locations")
-		return redirect("/locations/" + str(length))
+    if not "pseudo" in session:
+        return redirect(url_for("index"))
+    if request.method == "GET":
+        return render_template("creerpage.html")
+    elif request.method == "POST":
+        perso_id = User.query.filter_by(username=session["pseudo"]).first().id
+        post = Post(title=request.form["titre"],content=request.form["texte"],user_id=perso_id)
+        implemente(post)
+        return redirect("/locations")
 
 @app.route("/")
 def index():
-	return render_template("index.html",co="pseudo" in session)
+    return render_template("index.html",co="pseudo" in session)
 
 @app.route("/login",methods=["POST","GET"])
 def co():
-	if request.method == "GET":
-		return redirect(url_for("index"))
-	elif request.method == "POST":
-		if (request.form["pseudo"] in donnees("compte") and donnees("compte",request.form["pseudo"]) == sha1(request.form["mdp"].encode()).hexdigest()):
-			session["pseudo"] = request.form["pseudo"]
-			return redirect(url_for("profile"))
-		else:
-			return redirect(url_for("index"))
+    if request.method == "GET":
+        return redirect(url_for("index"))
+    elif request.method == "POST":
+        if (User.query.filter_by(username=request.form["pseudo"]).first() and User.query.filter_by(username=request.form["pseudo"]).first().password == request.form["mdp"]):
+            session["pseudo"] = request.form["pseudo"]
+            return redirect(url_for("profile"))
+        else:
+            return redirect(url_for("index"))
 
 @app.route("/locations")
 def alouer():
-	return render_template("locations.html",bdd=donnees("locations"))
+    return render_template("locations.html",bdd=Post.query.all())
 
 @app.route("/locations/<num>")
 def pagelouer(num):
-	try:
-		offre = donnees("locations",int(num))
-	except:
-		offre = {"title":"Page non trouvée","text":"La page n'existe pas"}
-	images = []
-	if "images" in offre:
-		load = open("images/photos.json","r")
-		nya = json.loads(load.read())
-		load.close()
-		for i in offre["images"]:
-			try: images.append(nya[i])
-			except: pass
-	return render_template("pagelouer.html",offre=offre,images=images)
+    offre = Post.query.filter_by(id=int(num)).first()
+    if not offre: return render_template("error.html")
+    return render_template("pagelouer.html",offre=offre,co="pseudo" in session,num=num)
+
+@app.route("/reserver/<nb>")
+def reserver(nb):
+    return render_template("payelouer.html",nb=nb)
 
 @app.route("/profile/<perso>")
 def persopage(perso):
-	offre = recherche(perso)
-	if perso in donnees("compte"): return render_template("offreperso.html",perso=offre,taille=len(offre),name=perso)
-	else: return render_template("pagelouer.html",offre={"title":"Personne non trouvé","text":"La personne cherchée n'existe pas."})
+    nya = User.query.filter_by(username=perso).first()
+    if nya:
+        offre = Post.query.filter_by(user_id=nya.id).all()
+        return render_template("offreperso.html",perso=offre,taille=len(offre),name=perso)
+    else: return render_template("error.html")
 
 @app.route("/profile")
 def profile():
-	if not "pseudo" in session:
-		return redirect(url_for("index"))
-	try:
-		offres = recherche(session["pseudo"])
-		return render_template("profile.html",name=session["pseudo"],propositions=offres,taille=len(offres))
-	except:
-		return render_template("profile.html",name=session["pseudo"],propositions=False)
+    if not "pseudo" in session:
+        return redirect(url_for("index"))
+    try:
+        offres = User.query.filter_by(username=session["pseudo"]).first().posts
+        return render_template("profile.html",name=session["pseudo"],propositions=offres,taille=len(offres))
+    except:
+        return render_template("profile.html",name=session["pseudo"],propositions=False)
 
 @app.route("/inscription",methods=["POST","GET"])
 def inscrire():
-	if request.method == "GET":
-		return render_template("inscription.html",notif=False)
-	elif request.method == "POST":
-		if not (request.form["pseudo"] in donnees("compte")):
-			modif = donnees("compte")
-			modif[request.form["pseudo"]] = sha1(request.form["mot_de_passe"].encode()).hexdigest()
-			entree(modif,"compte")
-			session["pseudo"] = request.form["pseudo"]
-			return redirect(url_for("profile"))
-		else:
-			return render_template("inscription.html",notif=True)
+    if request.method == "GET":
+        return render_template("inscription.html",notif=False)
+    elif request.method == "POST":
+        if not User.query.filter_by(username=request.form["pseudo"]).first():
+            user = User(username=request.form["pseudo"],password=request.form["mot_de_passe"],email=request.form["mail"])
+            implemente(user)
+            session["pseudo"] = request.form["pseudo"]
+            return redirect(url_for("profile"))
+        else:
+            return render_template("inscription.html",notif=True)
 
 @app.route("/deco")
 def deco():
-	session.pop("pseudo", None)
-	return redirect(url_for("index"))
+    session.pop("pseudo", None)
+    return redirect(url_for("index"))
 
 @app.route("/modif/<num>",methods=["POST","GET"])
 def modifier(num):
-	if not "pseudo" in session:
-		return redirect(url_for("index"))
-	else:
-		if request.method == "GET":
-			nya = donnees("locations",int(num))
-			if nya["owner"] == session["pseudo"]: return render_template("modif.html",valeur=nya)
-			else: return "Vous n'avez pas accès a cette page !"
-		elif request.method == "POST":
-			modify = donnees("locations",int(num))
-			if modify["owner"] == session["pseudo"]:
-				if "file" in request.files:
-					modify["images"] = saveimages(request.files.getlist("file"))
-				modify["title"] = request.form["titre"]
-				modify["text"] = request.form["texte"]
-				entree(modify,"locations",int(num))
-				return redirect("/locations/" + num)
-			else: return "Vous n'avez pas accès a cette page !"
+    if not "pseudo" in session:
+        return redirect(url_for("index"))
+    else:
+        nya = Post.query.filter_by(id=int(num)).first()
+        if nya.author.username == session["pseudo"]:
+            if request.method == "GET":
+                return render_template("modif.html",valeur=nya)
+            elif request.method == "POST":
+                nya.title = request.form["titre"]
+                nya.content = request.form["texte"]
+                db.session.commit()
+                return redirect("/locations/" + num)
+        else: return render_template("error.html")
 
 @app.errorhandler(404)
 def page_not_found(e):
     return "<h1 style='color:red;margin-top:100px;text-align:center;'>La page n'a pas été trouvée !</h1>"
 
 if __name__ == "__main__":
-	app.run(debug=True, host="0.0.0.0", port=80)
+    app.run(debug=True, host="0.0.0.0", port=80)
