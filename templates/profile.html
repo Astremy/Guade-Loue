@@ -12,7 +12,7 @@
 					<h3>Mes Offres</h3>
 					{% if propositions %}
 					{% for i in propositions %}
-					<p><a href="/locations/{{i['nb']}}">{{i["title"]}}</a> <a href="/modif/{{i['nb']}}" class=modif>[Modifier l'offre]</a></p>
+					<p><a href="/locations/{{i.id}}">{{i["title"]}}</a> <a href="/modif/{{i.id}}" class=modif>[Modifier l'offre]</a></p>
 					{% endfor %}
 					<a href="/create">Creer une nouvelle Offre</a>
 					{% else %}
@@ -21,9 +21,16 @@
 					{% endif %}
 				</div>
 				<div class="contenudroite">
-					<p>Contenu</p>
+					<h3>Conversations</h3>
+					{% if conv %}
+					{% for i in conv %}
+					<p><a>{{i}}</a></p>
+					{% endfor %}
+					{% else %}
+					<p>Vous n'avez aucune conversations</p>
+					{% endif %}
 				</div>
-				<p><a href="/">Menu</a></p>
+				<p class="menu"><a href="/">Menu</a></p>
 			</div>
 		</div>
 	</body>

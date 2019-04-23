@@ -6,14 +6,25 @@
 	</head>
 	<body>
 		<div class="contenu">
-			<h2>{{offre["title"]}}</h2>
-			<p>{{offre["text"]}}</p>
-			<p>
+			<h2>{{offre.title}}</h2>
+			<p>{{offre.content}}</p>
+			<!--<p>
 			{% for i in images %}
 			<img src={{i}} alt='image' />
 			{% endfor %}
-			</p>
+			</p>-->
+			{% if co %}
+			<h3 onclick="window.location = '/reserver/{{ num }}'">Réserver</h3>
+			{% else %}
+			<h3 onclick="login()">Se connecter</h3>
+			{% endif %}
 			<a href="/locations">Retour</a>
 		</div>
+		{% if not co %}
+		<div>
+			<link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet" type="text/css" />
+			{% include 'login.html' %}
+		</div>
+		{% endif %}
 	</body>
 </html>

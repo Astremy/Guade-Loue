@@ -7,8 +7,8 @@
 	<body>
 		<div class="contenu">
 			<h2>{{name}}</h2>
-			{% for i in range(taille) %}
-			<a href="/locations/{{name}}/{{i}}">{{perso[i]["title"]}}</p>
+			{% for i in perso %}
+			<a href="/locations/{{i.id}}">{{i.title}}</p>
 			{% endfor %}
 		</div>
 	</body>

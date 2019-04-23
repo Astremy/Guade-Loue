@@ -9,9 +9,9 @@
 			<h2>Location</h2>
 			<div class="offres">
 				{% for i in bdd %}
-				<div class="loc" onclick="window.location = '/locations/{{i["nb"]}}';">
-					<h3>{{i["title"]}}</h3>
-					<p class="droite"><a href="/profile/{{i['owner']}}">{{i["owner"]}}</a></p>
+				<div class="loc" onclick="window.location = '/locations/{{i.id}}';">
+					<h3>{{i.title}}</h3>
+					<p class="droite"><a href="/profile/{{i.author.username}}">{{i.author.username}}</a></p>
 				</div>
 				{% endfor %}
 				<a href="/">Retour</a>

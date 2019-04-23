@@ -9,11 +9,11 @@
 			<form method="post" enctype="multipart/form-data">
 				<h2>Modifications</h2>
 				<p>Titre</p>
-				<input size="30" type="text" name="titre" value="{{valeur['title']}}"/>
+				<input size="30" type="text" name="titre" value="{{valeur.title}}"/>
 				<p>Texte</p>
-				<textarea name="texte">{{valeur["text"]}}</textarea>
-				<p>Ajouter des images (Max 8 Mo)</p>
-				<p><input type="file" name="file" accept=".jpg,.png" multiple></p>
+				<textarea name="texte">{{valeur.content}}</textarea>
+				<!--<p>Ajouter des images (Max 8 Mo)</p>
+				<p><input type="file" name="file" accept=".jpg,.png" multiple></p>-->
 				<p><button>Valider</button></p>
 			</form>
 		</div>
