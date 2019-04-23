@@ -9,10 +9,7 @@ from time import sleep
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key= "857d5f34ad12c38196cda8a8925c67627ade79d536947de58ef8457c610f28cb"
-app.config['UPLOAD_FOLDER'] = "C:/Users/Astremy/Desktop/Projet/images"
-app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
-ALLOWED_EXTENSIONS = set(['png', 'jpg'])
+app.secret_key= "<Key>"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bdd.db'
 db = SQLAlchemy(app)
 
@@ -20,12 +17,11 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.id}', '{self.username}')"
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -35,7 +31,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"Post('{self.title}', '{self.date_posted}')"
+        return f"Post('{self.id}', '{self.title}')"
 
 def implemente(user):
     db.session.add(user)
