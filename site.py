@@ -3,7 +3,6 @@ from flask import Flask,url_for,request,redirect,render_template,session
 import json
 import os
 from hashlib import sha1
-import crypt
 from werkzeug.utils import secure_filename
 from time import sleep
 from flask_sqlalchemy import SQLAlchemy
