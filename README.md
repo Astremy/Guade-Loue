@@ -15,6 +15,9 @@ Tapez, dans l'ordre "cd 'chemin du dossier'", puis "python site.py".
 
 Ensuite, vous pouvez normalement accéder au site web via l'adresse "localhost" dans le navigateur.
 
+Pour plus de sécurité, je vous invite à modifier l'app.secretkey dans le fichier "site.py", pour un texte qui ressemble à :
+"$2y$10$y6pCI4WTrDZEq3/KY5UBlOD.AUsiC5UY.F9nlTCCJdo.mYK9pLfye"
+
 **EN**
 
 This project is a training for create a website with the flask module of python.
@@ -28,3 +31,6 @@ Write, in the cmd : "pip install flask,flask_sqlalchemy,datetime,werkzeug", and 
 Then, install the project in a folder, write in the cmd "cd 'Path of folder'", and after, "python site.py".
 
 If all is normal, you can open the site at the adress "localhost" in your browser.
+
+For the security, modify the app.secretkey, in the "site.py" file, for it look like :
+"$2y$10$zGSM3Zhnub6jYjdL6zjjvu/.nKsbO8y0ck3sFO4dHlv0PnQtg/DjW"
