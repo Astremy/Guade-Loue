@@ -58,7 +58,7 @@ def co():
     if request.method == "GET":
         return redirect(url_for("index"))
     elif request.method == "POST":
-        if (User.query.filter_by(username=request.form["pseudo"]).first() and User.query.filter_by(username=request.form["pseudo"]).first().password == request.form["mdp"]):
+        if (User.query.filter_by(username=request.form["pseudo"]).first() and bcrypt.checkpw(bytes(request.form["mdp"],"utf-8"),User.query.filter_by(username=request.form["pseudo"]).first().password)):
             session["pseudo"] = request.form["pseudo"]
             return redirect(url_for("profile"))
         else:
@@ -102,7 +102,7 @@ def inscrire():
         return render_template("inscription.html",notif=False)
     elif request.method == "POST":
         if not User.query.filter_by(username=request.form["pseudo"]).first():
-            user = User(username=request.form["pseudo"],password=request.form["mot_de_passe"],email=request.form["mail"])
+            user = User(username=request.form["pseudo"],password=bcrypt.hashpw(bytes(request.form["mot_de_passe"],"utf-8"),bcrypt.gensalt()),email=request.form["mail"])
             implemente(user)
             session["pseudo"] = request.form["pseudo"]
             return redirect(url_for("profile"))
