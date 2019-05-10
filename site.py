@@ -6,6 +6,9 @@ from hashlib import sha1
 from werkzeug.utils import secure_filename
 from time import sleep
 from flask_sqlalchemy import SQLAlchemy
+import requests
+
+version = "1.0.1\n"
 
 app = Flask(__name__)
 app.secret_key= "<Key>"
@@ -135,4 +138,10 @@ def page_not_found(e):
     return "<h1 style='color:red;margin-top:100px;text-align:center;'>La page n'a pas été trouvée !</h1>"
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=80)
+    print("Recherche de mise-a-jour...")
+    r = requests.get("https://raw.githubusercontent.com/Astremy1/Guade-Loue/master/version")
+    if version == str(r.text):
+        print("Aucune mise-a-jour")
+        app.run(debug=True, host="0.0.0.0", port=80)
+    else:
+        print("Mise-à-jour détectée !")
