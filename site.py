@@ -11,6 +11,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bdd.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+def lance(message):
+    print(message)
+    app.run(debug=True, host="0.0.0.0", port=80)
+    exit()
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -134,24 +139,15 @@ def page_not_found(e):
     return "<h1 style='color:red;margin-top:100px;text-align:center;'>La page n'a pas été trouvée !</h1>"
 
 if __name__ == "__main__":
-    print("Recherche de mise-a-jour...")
+    print("Recherche de mise-à-jour...")
     try:
         cherche_version = open("version.info","r")
         version = cherche_version.read()
         cherche_version.close()
-    except:
-        print("Pas de fichiers de version")
-        app.run(debug=True, host="0.0.0.0", port=80)
-        exit()
-    try :
-        r = requests.get("https://raw.githubusercontent.com/Astremy1/Guade-Loue/master/version.info")
-    except:
-        print("Aucune connexion")
-        app.run(debug=True, host="0.0.0.0", port=80)
-        exit()
-    if version == r.text.replace("\n",""):
-        print("Aucune mise-a-jour")
-        app.run(debug=True, host="0.0.0.0", port=80)
+    except: lance("Pas de fichiers de version")
+    try : r = requests.get("https://raw.githubusercontent.com/Astremy1/Guade-Loue/master/version.info")
+    except: lance("Aucune connexion")
+    if version == r.text.replace("\n",""): lance("Aucune mise-à-jour")
     else:
         print("Mise-à-jour détectée !")
         print("Téléchargement...")
