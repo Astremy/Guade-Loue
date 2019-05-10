@@ -13,6 +13,7 @@ version = "1.0.1\n"
 app = Flask(__name__)
 app.secret_key= "<Key>"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bdd.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class User(db.Model):
