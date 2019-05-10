@@ -147,7 +147,7 @@ if __name__ == "__main__":
     except: lance("Pas de fichiers de version")
     try : r = requests.get("https://raw.githubusercontent.com/Astremy1/Guade-Loue/master/version.info")
     except: lance("Aucune connexion")
-    if version == r.text.replace("\n",""): lance("Aucune mise-à-jour")
+    if version == r.text: lance("Aucune mise-à-jour")
     else:
         print("Mise-à-jour détectée !")
         print("Téléchargement...")
