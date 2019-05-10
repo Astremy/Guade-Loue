@@ -151,7 +151,8 @@ if __name__ == "__main__":
     else:
         print("Mise-à-jour détectée !")
         print("Téléchargement...")
-        dl = requests.get("https://github.com/Astremy1/Guade-Loue/archive/master.zip")
+        try: dl = requests.get("https://github.com/Astremy1/Guade-Loue/archive/master.zip")
+        except: lance("Aucune connexion")
         fichier = open("Guade-Loue.zip","wb")
         fichier.write(dl.content)
         fichier.close()
