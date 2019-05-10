@@ -1,14 +1,9 @@
 from datetime import datetime
 from flask import Flask,url_for,request,redirect,render_template,session
-import json
-import os
-from hashlib import sha1
-from werkzeug.utils import secure_filename
 from time import sleep
 from flask_sqlalchemy import SQLAlchemy
 import requests
-
-version = "1.0.1\n"
+import bcrypt
 
 app = Flask(__name__)
 app.secret_key= "<Key>"
@@ -140,9 +135,28 @@ def page_not_found(e):
 
 if __name__ == "__main__":
     print("Recherche de mise-a-jour...")
-    r = requests.get("https://raw.githubusercontent.com/Astremy1/Guade-Loue/master/version")
-    if version == str(r.text):
+    try:
+        cherche_version = open("version.info","r")
+        version = cherche_version.read()
+        cherche_version.close()
+    except:
+        print("Pas de fichiers de version")
+        app.run(debug=True, host="0.0.0.0", port=80)
+        exit()
+    try :
+        r = requests.get("https://raw.githubusercontent.com/Astremy1/Guade-Loue/master/version.info")
+    except:
+        print("Aucune connexion")
+        app.run(debug=True, host="0.0.0.0", port=80)
+        exit()
+    if version == r.text.replace("\n",""):
         print("Aucune mise-a-jour")
         app.run(debug=True, host="0.0.0.0", port=80)
     else:
         print("Mise-à-jour détectée !")
+        print("Téléchargement...")
+        dl = requests.get("https://github.com/Astremy1/Guade-Loue/archive/master.zip")
+        fichier = open("Guade-Loue.zip","wb")
+        fichier.write(dl.content)
+        fichier.close()
+        print("Archive téléchargée, veuillez l'installer à la place de cette version !")
