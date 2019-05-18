@@ -153,7 +153,16 @@ if __name__ == "__main__":
         print("Téléchargement...")
         try: dl = requests.get("https://github.com/Astremy1/Guade-Loue/archive/master.zip")
         except: lance("Aucune connexion")
+        for i in os.listdir():
+            try: os.remove(i)
+            except: shutil.rmtree(i)
         fichier = open("Guade-Loue.zip","wb")
         fichier.write(dl.content)
         fichier.close()
-        print("Archive téléchargée, veuillez l'installer à la place de cette version !")
+        print("Archive téléchargée, installation..")
+        archive = zipfile.ZipFile('Guade-Loue.zip')
+        for i in archive.namelist():
+            archive.extract(i,name=i[len(archive.namelist()[0]):])
+        archive.close()
+        os.remove("Guade-Loue.zip")
+        print("Téléchargement terminé !")
