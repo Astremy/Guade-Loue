@@ -141,35 +141,32 @@ def modifier(num):
 def page_not_found(e):
     return "<h1 style='color:red;margin-top:100px;text-align:center;'>La page n'a pas été trouvée !</h1>"
 
-def maj():
-    print("Recherche de mise-à-jour...")
-    try:
-        cherche_version = open("version.info","r")
-        version = cherche_version.read()
-        cherche_version.close()
-    except: lance("Pas de fichiers de version")
-    try : r = requests.get("https://raw.githubusercontent.com/Astremy/Guade-Loue/master/version.info")
+print("Recherche de mise-à-jour...")
+try:
+    cherche_version = open("version.info","r")
+    version = cherche_version.read()
+    cherche_version.close()
+except: lance("Pas de fichiers de version")
+try : r = requests.get("https://raw.githubusercontent.com/Astremy/Guade-Loue/master/version.info")
+except: lance("Aucune connexion")
+if version == r.text: lance("Aucune mise-à-jour")
+else:
+    print("Mise-à-jour détectée !")
+    print("Téléchargement...")
+    try: dl = requests.get("https://github.com/Astremy/Guade-Loue/archive/master.zip")
     except: lance("Aucune connexion")
-    if version == r.text: lance("Aucune mise-à-jour")
-    else:
-        print("Mise-à-jour détectée !")
-        print("Téléchargement...")
-        try: dl = requests.get("https://github.com/Astremy/Guade-Loue/archive/master.zip")
-        except: lance("Aucune connexion")
-        for i in os.listdir():
-            try: os.remove(i)
-            except: shutil.rmtree(i)
-        fichier = open("Guade-Loue.zip","wb")
-        fichier.write(dl.content)
-        fichier.close()
-        print("Archive téléchargée, installation..")
-        archive = zipfile.ZipFile('Guade-Loue.zip')
-        for i in archive.namelist():
-            archive.extract(i,name=i[len(archive.namelist()[0]):])
-        archive.close()
-        os.remove("Guade-Loue.zip")
-        print("Téléchargement terminé !")
-        print("Lancement..")
-        import site
-
-maj()
+    for i in os.listdir():
+        try: os.remove(i)
+        except: shutil.rmtree(i)
+    fichier = open("Guade-Loue.zip","wb")
+    fichier.write(dl.content)
+    fichier.close()
+    print("Archive téléchargée, installation..")
+    archive = zipfile.ZipFile('Guade-Loue.zip')
+    for i in archive.namelist():
+        archive.extract(i,name=i[len(archive.namelist()[0]):])
+    archive.close()
+    os.remove("Guade-Loue.zip")
+    print("Téléchargement terminé !")
+    print("Lancement..")
+    import site
