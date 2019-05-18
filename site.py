@@ -141,7 +141,7 @@ def modifier(num):
 def page_not_found(e):
     return "<h1 style='color:red;margin-top:100px;text-align:center;'>La page n'a pas été trouvée !</h1>"
 
-if __name__ == "__main__":
+def maj():
     print("Recherche de mise-à-jour...")
     try:
         cherche_version = open("version.info","r")
@@ -169,3 +169,9 @@ if __name__ == "__main__":
         archive.close()
         os.remove("Guade-Loue.zip")
         print("Téléchargement terminé !")
+        print("Lancement..")
+        import site
+        site.maj()
+
+if __name__ == "__main__":
+    maj()
