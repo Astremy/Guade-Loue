@@ -173,5 +173,4 @@ def maj():
         import site
         site.maj()
 
-if __name__ == "__main__":
-    maj()
+maj()
