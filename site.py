@@ -148,13 +148,13 @@ if __name__ == "__main__":
         version = cherche_version.read()
         cherche_version.close()
     except: lance("Pas de fichiers de version")
-    try : r = requests.get("https://raw.githubusercontent.com/Astremy1/Guade-Loue/master/version.info")
+    try : r = requests.get("https://raw.githubusercontent.com/Astremy/Guade-Loue/master/version.info")
     except: lance("Aucune connexion")
     if version == r.text: lance("Aucune mise-à-jour")
     else:
         print("Mise-à-jour détectée !")
         print("Téléchargement...")
-        try: dl = requests.get("https://github.com/Astremy1/Guade-Loue/archive/master.zip")
+        try: dl = requests.get("https://github.com/Astremy/Guade-Loue/archive/master.zip")
         except: lance("Aucune connexion")
         for i in os.listdir():
             try: os.remove(i)
