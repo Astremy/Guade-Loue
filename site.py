@@ -171,6 +171,5 @@ def maj():
         print("Téléchargement terminé !")
         print("Lancement..")
         import site
-        site.maj()
 
 maj()
