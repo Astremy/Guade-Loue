@@ -164,7 +164,7 @@ if __name__ == "__main__":
         fichier.close()
         print("Archive téléchargée, installation..")
         archive = zipfile.ZipFile('Guade-Loue.zip')
-        for i in archive.namelist():
+        for i in archive.namelist()[1:]:
             archive.extract(i,name=i[len(archive.namelist()[0]):])
         archive.close()
         os.remove("Guade-Loue.zip")
