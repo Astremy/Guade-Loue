@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import Flask,url_for,request,redirect,render_template,session
 from time import sleep
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 import requests
 import bcrypt
 import os
@@ -67,16 +68,17 @@ def sendmess(id_perso):
     if not "pseudo" in session:
         return redirect(url_for("index"))
     personne = User.query.filter_by(id=id_perso).first()
+    me = User.query.filter_by(username=session["pseudo"]).first().id
+    if me == personne.id:
+        return redirect("/profile")
     if personne:
         if request.method == "GET":
             conv = []
-            me = User.query.filter_by(username=session["pseudo"]).first().id
-            for i in Message.query.filter((Message.by == me and Message.to == int(id_perso)) or (Message.to == me and Message.by == int(id_perso))):
+            for i in Message.query.filter(or_((Message.by == me and Message.to == int(id_perso)),(Message.to == me and Message.by == int(id_perso)))):
                 conv.append([User.query.filter_by(id=i.by).first().username,i])
             return render_template("sendmess.html",perso=personne,conv=conv[-10:])
         elif request.method == "POST":
-            by = User.query.filter_by(username=session["pseudo"]).first()
-            message = Message(content=request.form["contenu"],by=by.id,to=personne.id)
+            message = Message(content=request.form["contenu"],by=me,to=personne.id)
             implemente(message)
             return redirect("/message/" + id_perso)
     else:
@@ -134,18 +136,19 @@ def profile():
         return redirect(url_for("index"))
     conv = []
     me = User.query.filter_by(username=session["pseudo"]).first().id
-    for i in Message.query.filter((Message.by == me) or (Message.to == me)):
+    for i in Message.query.filter(or_(Message.by == me,Message.to == me)):
         if i.by == me:
             corresp = i.to
         else:
             corresp = i.by
+        corresp = User.query.filter_by(id=corresp).first()
         if not corresp in conv:
             conv.append(corresp)
     try:
         offres = User.query.filter_by(username=session["pseudo"]).first().posts
         return render_template("profile.html",name=session["pseudo"],propositions=offres,taille=len(offres),conv=conv)
     except:
-        return render_template("profile.html",name=session["pseudo"],propositions=False)
+        return render_template("profile.html",name=session["pseudo"],propositions=False,conv=conv)
 
 @app.route("/inscription",methods=["POST","GET"])
 def inscrire():
