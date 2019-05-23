@@ -118,7 +118,8 @@ def pagelouer(num):
 
 @app.route("/reserver/<nb>")
 def reserver(nb):
-    return render_template("payelouer.html",nb=nb)
+    personne = User.query.filter_by(id=nb).first()
+    return render_template("payelouer.html",perso = personne)
 
 @app.route("/profile/<perso>")
 def persopage(perso):
