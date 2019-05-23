@@ -24,7 +24,7 @@
 					<h3>Conversations</h3>
 					{% if conv %}
 					{% for i in conv %}
-					<p><a>{{i}}</a></p>
+					<p><a href="/message/{{i.id}}">{{i.username}}</a></p>
 					{% endfor %}
 					{% else %}
 					<p>Vous n'avez aucune conversations</p>
