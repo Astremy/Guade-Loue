@@ -72,7 +72,7 @@ def sendmess(id_perso):
             conv = []
             me = User.query.filter_by(username=session["pseudo"]).first().id
             for i in Message.query.all():
-                if ((i.by == me or i.to == me) and (i.by == int(id_perso) or i.to == int(id_perso))):
+                if ((i.by == me and i.to == int(id_perso)) or ((i.to == me) and i.by == int(id_perso))):
                     conv.append([User.query.filter_by(id=i.by).first().username,i])
             return render_template("sendmess.html",perso=personne,conv=conv[-10:])
         elif request.method == "POST":
