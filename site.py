@@ -71,9 +71,8 @@ def sendmess(id_perso):
         if request.method == "GET":
             conv = []
             me = User.query.filter_by(username=session["pseudo"]).first().id
-            for i in Message.query.all():
-                if ((i.by == me and i.to == int(id_perso)) or ((i.to == me) and i.by == int(id_perso))):
-                    conv.append([User.query.filter_by(id=i.by).first().username,i])
+            for i in Message.query.filter((Message.by == me and Message.to == int(id_perso)) or (Message.to == me and Message.by == int(id_perso))):
+                conv.append([User.query.filter_by(id=i.by).first().username,i])
             return render_template("sendmess.html",perso=personne,conv=conv[-10:])
         elif request.method == "POST":
             by = User.query.filter_by(username=session["pseudo"]).first()
@@ -135,12 +134,11 @@ def profile():
         return redirect(url_for("index"))
     conv = []
     me = User.query.filter_by(username=session["pseudo"]).first().id
-    for i in Message.query.filter_by(by=me).all():
-        corresp = User.query.filter_by(id=i.to).first()
-        if not corresp in conv:
-            conv.append(corresp)
-    for i in Message.query.filter_by(to=me).all():
-        corresp = User.query.filter_by(id=i.by).first()
+    for i in Message.query.filter((Message.by == me) or (Message.to == me)):
+        if i.by == me:
+            corresp = i.to
+        else:
+            corresp = i.by
         if not corresp in conv:
             conv.append(corresp)
     try:
