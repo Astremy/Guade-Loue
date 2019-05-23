@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ name }}</title>
+		<link href="{{ url_for('static', filename='css/profile.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="contenu">
+			<h3>Messages privés avec {{perso.username}} :</h3>
+			{% for i in conv %}
+			<p>{{i[0]}} - {{i[1].content}}</p>
+			{% endfor %}
+			<form method="post">
+				<p>Message : <input name="contenu"></p>
+			</form>
+			<p class="menu"><a href="/">Menu</a></p>
+		</div>
+	</body>
+</html>
