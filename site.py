@@ -40,10 +40,49 @@ class Post(db.Model):
     def __repr__(self):
         return f"Post('{self.id}', '{self.title}')"
 
+class Message(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    content = db.Column(db.Text,nullable=False)
+    to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Message('{self.id}', [ De: '{self.by}', Vers: '{self.to}' ])"
+
 def implemente(user):
     db.session.add(user)
     db.session.commit()
-	
+
+@app.route("/")
+def index():
+    return render_template("index.html",co="pseudo" in session)
+
+@app.route("/test/<name>")
+def setname(name):
+    session["pseudo"] = name
+    return redirect("/")
+
+@app.route("/message/<id_perso>",methods=["POST","GET"])
+def sendmess(id_perso):
+    if not "pseudo" in session:
+        return redirect(url_for("index"))
+    personne = User.query.filter_by(id=id_perso).first()
+    if personne:
+        if request.method == "GET":
+            conv = []
+            me = User.query.filter_by(username=session["pseudo"]).first().id
+            for i in Message.query.all():
+                if ((i.by == me or i.to == me) and (i.by == int(id_perso) or i.to == int(id_perso))):
+                    conv.append([User.query.filter_by(id=i.by).first().username,i])
+            return render_template("sendmess.html",perso=personne,conv=conv[-10:])
+        elif request.method == "POST":
+            by = User.query.filter_by(username=session["pseudo"]).first()
+            message = Message(content=request.form["contenu"],by=by.id,to=personne.id)
+            implemente(message)
+            return redirect("/message/" + id_perso)
+    else:
+        return redirect("/")
+
 @app.route("/create",methods=["POST","GET"])
 def creerpage():
     if not "pseudo" in session:
@@ -55,10 +94,6 @@ def creerpage():
         post = Post(title=request.form["titre"],content=request.form["texte"],user_id=perso_id)
         implemente(post)
         return redirect("/locations")
-
-@app.route("/")
-def index():
-    return render_template("index.html",co="pseudo" in session)
 
 @app.route("/login",methods=["POST","GET"])
 def co():
@@ -97,9 +132,19 @@ def persopage(perso):
 def profile():
     if not "pseudo" in session:
         return redirect(url_for("index"))
+    conv = []
+    me = User.query.filter_by(username=session["pseudo"]).first().id
+    for i in Message.query.filter_by(by=me).all():
+        corresp = User.query.filter_by(id=i.to).first()
+        if not corresp in conv:
+            conv.append(corresp)
+    for i in Message.query.filter_by(to=me).all():
+        corresp = User.query.filter_by(id=i.by).first()
+        if not corresp in conv:
+            conv.append(corresp)
     try:
         offres = User.query.filter_by(username=session["pseudo"]).first().posts
-        return render_template("profile.html",name=session["pseudo"],propositions=offres,taille=len(offres))
+        return render_template("profile.html",name=session["pseudo"],propositions=offres,taille=len(offres),conv=conv)
     except:
         return render_template("profile.html",name=session["pseudo"],propositions=False)
 
@@ -168,6 +213,6 @@ if __name__ == "__main__":
             archive.extract(i,name=i[len(archive.namelist()[0]):])
         archive.close()
         os.remove("Guade-Loue.zip")
-        print("Installation terminé !")
+        print("Téléchargement terminé !")
         print("Lancement..")
         os.system("python site.py")
