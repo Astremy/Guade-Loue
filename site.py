@@ -120,14 +120,14 @@ def pagelouer(num):
 @app.route("/reserver/<nb>")
 def reserver(nb):
     personne = User.query.filter_by(id=nb).first()
-    return render_template("payelouer.html",perso = personne)
+    return render_template("payelouer.html",perso=personne,nb=nb)
 
 @app.route("/profile/<perso>")
 def persopage(perso):
     nya = User.query.filter_by(username=perso).first()
     if nya:
         offre = Post.query.filter_by(user_id=nya.id).all()
-        return render_template("offreperso.html",perso=offre,taille=len(offre),name=perso)
+        return render_template("offreperso.html",offres=offre,perso=nya.id,taille=len(offre),name=perso,co="pseudo" in session)
     else: return render_template("error.html")
 
 @app.route("/profile")
