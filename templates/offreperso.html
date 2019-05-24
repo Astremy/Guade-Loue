@@ -7,8 +7,11 @@
 	<body>
 		<div class="contenu">
 			<h2>{{name}}</h2>
-			{% for i in perso %}
-			<a href="/locations/{{i.id}}">{{i.title}}</p>
+			{% if co %}
+			<h3><a href="/message/{{perso}}">Envoyer un message privé</a></h3>
+			{% endif %}
+			{% for i in offres %}
+			<p><a href="/locations/{{i.id}}">{{i.title}}</a></p>
 			{% endfor %}
 		</div>
 	</body>
