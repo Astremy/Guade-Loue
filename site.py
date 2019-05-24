@@ -221,6 +221,6 @@ if __name__ == "__main__":
             archive.extract(i,name=i[len(archive.namelist()[0]):])
         archive.close()
         os.remove("Guade-Loue.zip")
-        print("Téléchargement terminé !")
+        print("Installation terminé !")
         print("Lancement..")
         os.system("python site.py")
