@@ -64,12 +64,10 @@ def favicon():
 
 @app.route("/checkpseudo",methods=["POST"])
 def recherchepseudo():
-    print(request.form["pseudo"])
-    print(User.query.filter_by(username=request.form["pseudo"]).first())
-    if User.query.filter_by(username=request.form["pseudo"]).first() == None:
-        return "1"
-    else:
+    if User.query.filter_by(username=request.form["pseudo"]).first():
         return "0"
+    else:
+        return "1"
 
 @app.route("/message/<id_perso>",methods=["POST","GET"])
 def sendmess(id_perso):
@@ -163,7 +161,7 @@ def inscrire():
     if request.method == "GET":
         return render_template("inscription.html",notif=False)
     elif request.method == "POST":
-        if not User.query.filter_by(username=request.form["pseudo"]).first():
+        if not (User.query.filter_by(username=request.form["pseudo"]).first() or request.form["pseudo"]==""):
             user = User(username=request.form["pseudo"],password=bcrypt.hashpw(bytes(request.form["mot_de_passe"],"utf-8"),bcrypt.gensalt()),email=request.form["mail"])
             implemente(user)
             session["pseudo"] = request.form["pseudo"]
