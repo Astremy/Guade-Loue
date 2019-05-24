@@ -23,7 +23,7 @@ def lance(message):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
@@ -58,10 +58,18 @@ def implemente(user):
 def index():
     return render_template("index.html",co="pseudo" in session)
 
-@app.route("/test/<name>")
-def setname(name):
-    session["pseudo"] = name
-    return redirect("/")
+@app.route('/favicon.ico')
+def favicon():
+    return url_for('static', filename='espace.ico')
+
+@app.route("/checkpseudo",methods=["POST"])
+def recherchepseudo():
+    print(request.form["pseudo"])
+    print(User.query.filter_by(username=request.form["pseudo"]).first())
+    if User.query.filter_by(username=request.form["pseudo"]).first() == None:
+        return "1"
+    else:
+        return "0"
 
 @app.route("/message/<id_perso>",methods=["POST","GET"])
 def sendmess(id_perso):
