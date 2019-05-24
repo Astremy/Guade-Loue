@@ -2,17 +2,18 @@
 <html>
 	<head>
 		<title>S'inscrire</title>
-		<link href="{{ url_for('static', filename='css/inscription.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ url_for('static', filename='css/profile.css') }}" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
-		<div class="inscrire">
-		<form id="compte" action="/inscription" method="post">
-        	<p><label>Pseudo</label> : <input type="text" name="pseudo" size="10" maxlength="50" id="pseudonyme" oninput="verifpseudo();" /> <label id="ps"></label></p>
-            <p><label>Mot De Passe</label> : <input type="password" name="mot_de_passe" size="10" maxlength="50" id="protec" oninput="protection()" /> <b><label id="mdp"></label></b></p>
-            <p id="protec2"><label>Répétez Le Mot De Passe</label> : <input type="password" id="protecmot" size="10" maxlength="50" oninput="verifMdp()" /></p>
-            <p><b><label id="pareil"></label></b></p>
-            <p><label>Adresse Mail</label> : <input id="email" oninput="verifmail();" type="text" name="mail" size="10" maxlength="50" /> <b><label id="cochemail"></label></b></p>
-            <p><button onclick="test(); return false;">Valider</button></p>
+        <div class="contenu">
+            <form id="compte" action="/inscription" method="post">
+                <h2>Inscription</h2>
+                <p><label>Pseudo</label> : <input type="text" name="pseudo" size="10" maxlength="50" id="pseudonyme" oninput="verifpseudo();" /> <label id="ps"></label></p>
+                <p><label>Mot De Passe</label> : <input type="password" name="mot_de_passe" size="10" maxlength="50" id="protec" oninput="protection()" /> <b><label id="mdp"></label></b></p>
+                <p id="protec2"><label>Répétez Le Mot De Passe</label> : <input type="password" id="protecmot" size="10" maxlength="50" oninput="verifMdp()" /></p>
+                <p><b><label id="pareil"></label></b></p>
+                <p><label>Adresse Mail</label> : <input id="email" oninput="verifmail();" type="text" name="mail" size="10" maxlength="50" /> <b><label id="cochemail"></label></b></p>
+                <p><button onclick="test(); return false;">Valider</button></p>
             </form>
             <script language="Javascript">
                 var protecmdp = document.getElementById("protec2");
