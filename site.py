@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 
 def lance(message):
     print(message)
-    app.run(debug=True, host="0.0.0.0:5000", port=80)
+    app.run(debug=True, host="0.0.0.0", port=80)
     exit()
 
 class User(db.Model):
