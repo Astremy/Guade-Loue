@@ -42,6 +42,6 @@ Versions :
 
 1.0.1 : Ajout de mises à jour automatiques
 
-1.0.2 : Réglage de bugs
+1.0.2 : Réglage de bugs + Ajout de favicon
 
 1.0.3 : Ajout de possibilités de dialogues entre les usagers
