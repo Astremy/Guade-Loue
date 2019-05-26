@@ -35,6 +35,9 @@ If all is normal, you can open the site at the adress "localhost" in your browse
 For the security, modify the app.secretkey, in the "site.py" file, for it look like :
 "$2y$10$zGSM3Zhnub6jYjdL6zjjvu/.nKsbO8y0ck3sFO4dHlv0PnQtg/DjW"
 
+
+Versions :
+
 1.0.0 : Ajout de version et détection de mise à jour
 
 1.0.1 : Ajout de mises à jour automatiques
