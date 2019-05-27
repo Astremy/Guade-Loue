@@ -45,3 +45,5 @@ Versions :
 1.0.2 : Réglage de bugs + Ajout de favicon
 
 1.0.3 : Ajout de possibilités de dialogues entre les usagers
+
+1.0.4 : Ajout de prix et villes, ainsi que de recherche par prix/ville
