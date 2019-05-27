@@ -79,7 +79,7 @@ def recherche():
     else:
         liste = Post.query.filter(Post.location.contains(request.form["location"])).all()[:10]
     for i in liste:
-        retour.append(i.title + "," + str(i.id) + "," + i.location + "," + User.query.filter_by(id=i.user_id).first().username)
+        retour.append(i.title + "," + str(i.id) + "," + i.location + "," + i.author.username)
     return "!".join(retour)
 
 @app.route("/search")
