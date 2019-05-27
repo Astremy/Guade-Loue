@@ -34,6 +34,8 @@ class User(db.Model):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Integer,nullable=False)
+    location = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -69,6 +71,21 @@ def recherchepseudo():
     else:
         return "1"
 
+@app.route("/recherche",methods=["POST"])
+def recherche():
+    retour = []
+    if request.form["price"].isdecimal():
+        liste = Post.query.filter(Post.location.contains(request.form["location"])).filter(Post.price <= int(request.form["price"])).all()[:10]
+    else:
+        liste = Post.query.filter(Post.location.contains(request.form["location"])).all()[:10]
+    for i in liste:
+        retour.append(i.title + "," + str(i.id) + "," + i.location + "," + User.query.filter_by(id=i.user_id).first().username)
+    return "!".join(retour)
+
+@app.route("/search")
+def cherche():
+    return render_template("search.html")
+
 @app.route("/message/<id_perso>",methods=["POST","GET"])
 def sendmess(id_perso):
     if not "pseudo" in session:
@@ -97,8 +114,10 @@ def creerpage():
     if request.method == "GET":
         return render_template("creerpage.html")
     elif request.method == "POST":
+        if not request.form["price"].isdecimal():
+            return redirect("/create")
         perso_id = User.query.filter_by(username=session["pseudo"]).first().id
-        post = Post(title=request.form["titre"],content=request.form["texte"],user_id=perso_id)
+        post = Post(title=request.form["titre"],content=request.form["texte"],user_id=perso_id,location=request.form["location"],price=request.form["price"])
         implemente(post)
         return redirect("/locations")
 
@@ -184,8 +203,12 @@ def modifier(num):
             if request.method == "GET":
                 return render_template("modif.html",valeur=nya)
             elif request.method == "POST":
+                if not request.form["price"].isdecimal():
+                    return redirect("/modif/" + num)
                 nya.title = request.form["titre"]
                 nya.content = request.form["texte"]
+                nya.price = request.form["price"]
+                nya.location = request.form["location"]
                 db.session.commit()
                 return redirect("/locations/" + num)
         else: return render_template("error.html")
