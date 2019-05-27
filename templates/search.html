@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Locations</title>
+		<link href="{{ url_for('static', filename='css/locations.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="contenu">
+			<h2>Location</h2>
+			<p>Ville : <input type="text" size="10" maxlength="50" id="location" /></p>
+			<p>Prix max: <input type="text" size="7" maxlength="10" id="price" /></p>
+			<button onclick="recherche();">Rechercher</button>
+			<div id="affiche"></div>
+			<a href="/locations">Retour</a>
+			<script language="Javascript">
+				var aff = document.getElementById("affiche");
+				function recherche()
+                {
+					var location = document.getElementById("location").value;
+					var price = document.getElementById("price").value;
+					var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/recherche');
+                    var form = new FormData();
+                    form.append('location', location);
+                    form.append('price', price);
+
+                    xhr.onreadystatechange = function()
+                    {
+                    	var div = document.getElementById('affiche');
+                    	while(div.firstChild){
+							div.removeChild(div.firstChild);
+						}
+                    	if (xhr.responseText != ""){
+							reponse = xhr.responseText.split('!');
+							for (var i in reponse) {
+								coupe = reponse[i].split(",");
+								var element = document.createElement("p");
+								var click = document.createElement("a");
+								var texte = document.createTextNode(coupe[0] + " (" + coupe[2] + ")");
+								click.setAttribute('href',"/locations/" + coupe[1]);
+								click.appendChild(texte);
+								element.appendChild(click);
+								div.appendChild(element);
+                    		}
+                    	}
+                    	else {
+                    		div.appendChild(document.createElement("p"));
+                    	}
+					}
+					xhr.send(form);
+				}
+			</script>
+		</div>
+	</body>
+</html>
