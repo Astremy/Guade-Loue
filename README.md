@@ -47,3 +47,6 @@ Versions :
 1.0.3 : Ajout de possibilités de dialogues entre les usagers
 
 1.0.4 : Ajout de prix et villes, ainsi que de recherche par prix/ville
+
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>
